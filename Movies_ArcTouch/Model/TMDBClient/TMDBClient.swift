@@ -30,9 +30,11 @@ class TMDBClient : NSObject {
         }
     }
     
-    func getUpcomingMovies(_ completionHandlerForUpcomingMovies: @escaping (_ response: [Movie]?, _ error: NSError?) -> Void) {
+    func getUpcomingMovies(forPage page: Int = 1, _ completionHandlerForUpcomingMovies: @escaping (_ response: [Movie]?, _ error: NSError?) -> Void) {
         
-        taskForGETMethod(Methods.UpcomingMovies, parameters: nil) { (response, error) in
+        let parameters = [TMDBClient.ParameterKeys.Page:page as AnyObject]
+        
+        taskForGETMethod(Methods.UpcomingMovies, parameters: parameters) { (response, error) in
             if let error = error {
                 completionHandlerForUpcomingMovies(nil, error)
             } else {
@@ -62,29 +64,50 @@ class TMDBClient : NSObject {
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForGET(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
             }
-            
             guard (error == nil) else {
                 sendError("There was an error with your request: \(error!)")
                 return
             }
-            
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
                 sendError("Your request returned a status code other than 2xx!")
                 return
             }
-            
             guard let data = data else {
                 sendError("No data was returned by the request!")
                 return
             }
-            
             self.convert(data, completionHadlerForData: completionHandlerForGET)
-            
         }
         task.resume()
-        
     }
     
+    func taskForGETImage(_ size: String, filePath: String, completionHandlerForImage: @escaping (_ imageData: Data?, _ error: NSError?) -> Void) {
+        
+        let baseURL = URL(string: TMDBClient.Constants.SecureBaseImageURLString)!
+        let url = baseURL.appendingPathComponent(size).appendingPathComponent(filePath)
+        let request = URLRequest(url: url)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            func sendError(_ error: String) {
+                print(error)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForImage(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
+            }
+            guard (error == nil) else {
+                sendError("There was an error with your request: \(error!)")
+                return
+            }
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                sendError("Your request returned a status code other than 2xx!")
+                return
+            }
+            guard let data = data else {
+                sendError("No data was returned by the request!")
+                return
+            }
+            completionHandlerForImage(data, nil)
+        }.resume()
+    }
     
     private func urlFromParameters(_ parameters: [String:AnyObject]?, withPathExtension: String? = nil) -> URL {
         var components = URLComponents()

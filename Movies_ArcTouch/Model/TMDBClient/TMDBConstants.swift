@@ -13,6 +13,11 @@ extension TMDBClient {
         static let ApiScheme = "https"
         static let ApiHost = "api.themoviedb.org"
         static let ApiPath = "/3"
+        static let BaseImageURLString = "http://image.tmdb.org/t/p/"
+        static let SecureBaseImageURLString =  "https://image.tmdb.org/t/p/"
+        static let PosterSizes = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
+        static let ProfileSizes = ["w45", "w185", "h632", "original"]
+        static let MoviePerPage = 20
     }
     
     struct Methods {
@@ -25,6 +30,7 @@ extension TMDBClient {
     struct ParameterKeys {
         static let ApiKey = "api_key"
         static let Query = "query"
+        static let Page = "page"
     }
     
     struct JSONBodyKeys {
@@ -44,5 +50,10 @@ extension TMDBClient {
         static let GenreID = "id"
         static let GenreName = "name"
         static let GenreResults = "genres"
+    }
+    
+    struct PosterSizes {
+        static let RowPoster = Constants.PosterSizes[2]
+        static let DetailPoster = Constants.PosterSizes[4]
     }
 }
