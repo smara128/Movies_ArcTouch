@@ -54,9 +54,11 @@ class TMDBClient : NSObject {
     
     func getMovieDetails(forId id: Int, _ completionHandlerForMovieDetails: @escaping (_ response: Movie?, _ error: NSError?) -> Void) -> URLSessionTask {
         
+        let parameters = [TMDBClient.ParameterKeys.AppendToResponse:"videos" as AnyObject]
+        
         let mutableMethod: String = substituteKeyInMethod(TMDBClient.Methods.MovieDetails, key: TMDBClient.ParameterKeys.MovieID, value: "\(id)")!
         
-        let task = taskForGETMethod(mutableMethod, parameters: nil) { (response, error) in
+        let task = taskForGETMethod(mutableMethod, parameters: parameters) { (response, error) in
             if let error = error {
                 completionHandlerForMovieDetails(nil, error)
             } else {
@@ -78,6 +80,7 @@ class TMDBClient : NSObject {
     func taskForGETMethod(_ method: String, parameters: [String:AnyObject]?, completionHandlerForGET: @escaping (_ response: AnyObject?, _ error: NSError?) -> Void) -> URLSessionTask {
         
         let url = urlFromParameters(parameters, withPathExtension: method)
+        print(url.absoluteString)
         let request = NSMutableURLRequest(url: url)
         
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
@@ -161,6 +164,7 @@ class TMDBClient : NSObject {
         var parsedResponse: AnyObject? = nil
         do {
             parsedResponse = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
+            print(parsedResponse!)
         } catch {
             let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
             let parseError = NSError(domain: "converData", code: 0, userInfo: userInfo)

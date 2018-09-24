@@ -16,6 +16,7 @@ class Movie {
     let releaseDate: String?
     let posterPath: String?
     let runtime: Int?
+    var videos: Array<Video>?
     var genreIds: Array<Int>?
     var genres: Array<Genre>?
     var genreNames: String {
@@ -45,6 +46,12 @@ class Movie {
         } else {
             if let genresObject = dictionary[TMDBClient.JSONResponseKeys.MovieDetailsGenres] as? [[String:AnyObject]] {
                 genres = Genre.genresFromResponse(genresObject)
+            }
+        }
+        if let videoResults = dictionary[TMDBClient.JSONResponseKeys.MovieVideos] as? [String:AnyObject] {
+            if let results = videoResults[TMDBClient.JSONResponseKeys.VideoResults] as? [[String:AnyObject]]{
+                print(videoResults)
+                videos = Video.videosFromResponse(results)
             }
         }
         
@@ -86,7 +93,25 @@ class Genre {
         }
         return genres
     }
+}
+
+
+class Video {
     
+    let site: String?
+    let key: String?
     
+    init(dictionary: [String:AnyObject]) {
+        site = dictionary[TMDBClient.JSONResponseKeys.VideoSite] as? String
+        key = dictionary[TMDBClient.JSONResponseKeys.VideoKey] as? String
+    }
+    
+    static func videosFromResponse(_ response: [[String:AnyObject]]) -> [Video] {
+        var videos = [Video]()
+        for dict in response {
+            videos.append(Video(dictionary: dict))
+        }
+        return videos
+    }
 }
 

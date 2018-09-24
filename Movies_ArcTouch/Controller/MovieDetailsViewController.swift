@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import WebKit
 
 class MovieDetailsViewController: UIViewController {
 
     
+    @IBOutlet weak var trailerWebView: WKWebView!
     @IBOutlet weak var backdropImageView: UIImageView!
     @IBOutlet weak var durationLabel: UILabel!
-    @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var genresLabel: UILabel!
     @IBOutlet weak var overviewTextView: UITextView!
@@ -54,6 +55,10 @@ class MovieDetailsViewController: UIViewController {
                 })
             }
             genresLabel.text = movie.genreNames
+            if let key = movie.videos?.first?.key {
+                let url = URL(string:"https://www.youtube.com/watch?v=\(key)?playsinline=1&autoplay=0")
+                trailerWebView.load(URLRequest(url: url!))
+            }
         }
         
     }

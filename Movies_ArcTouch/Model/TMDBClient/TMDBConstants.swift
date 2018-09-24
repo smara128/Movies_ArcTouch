@@ -32,6 +32,7 @@ extension TMDBClient {
         static let Query = "query"
         static let Page = "page"
         static let MovieID = "movie_id"
+        static let AppendToResponse = "append_to_response"
     }
     
     struct JSONBodyKeys {
@@ -47,6 +48,7 @@ extension TMDBClient {
         static let MovieBackdropPath = "backdrop_path"
         static let MovieReleaseDate = "release_date"
         static let MovieRuntime = "runtime"
+        static let MovieVideos = "videos"
         
         // Upcoming Movies
         static let MovieGenres = "genre_ids"
@@ -54,12 +56,16 @@ extension TMDBClient {
 
         // Movie Details
         static let MovieDetailsGenres = "genres"
-
         
-        
+        // Genres
         static let GenreID = "id"
         static let GenreName = "name"
         static let GenreResults = "genres"
+        
+        //Videos
+        static let VideoSite = "site"
+        static let VideoKey = "key"
+        static let VideoResults = "results"
     }
     
     struct PosterSizes {
