@@ -76,6 +76,24 @@ class TMDBClient : NSObject {
         return task
     }
     
+    func getMoviesForSearchString(_ searchString: String, completionHandlerForMovies: @escaping (_ result: [Movie]?, _ error: NSError?) -> Void) -> URLSessionTask? {
+        
+        let parameters = [TMDBClient.ParameterKeys.Query: searchString]
+        let task = taskForGETMethod(Methods.SearchMovie, parameters: parameters as [String:AnyObject]) { (results, error) in
+            if let error = error {
+                completionHandlerForMovies(nil, error)
+            } else {
+                if let results = results?[TMDBClient.JSONResponseKeys.MovieResults] as? [[String:AnyObject]] {
+                    let movies = Movie.moviesFromResponse(results)
+                    completionHandlerForMovies(movies, nil)
+                } else {
+                    completionHandlerForMovies(nil, NSError(domain: "getMoviesForSearchString parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse getMoviesForSearchString"]))
+                }
+            }
+        }
+        return task
+    }
+    
     // Mark: Base Requests
     func taskForGETMethod(_ method: String, parameters: [String:AnyObject]?, completionHandlerForGET: @escaping (_ response: AnyObject?, _ error: NSError?) -> Void) -> URLSessionTask {
         

@@ -17,6 +17,7 @@
 		8C37A51421567CD3008504B7 /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37A51321567CD3008504B7 /* TMDBClient.swift */; };
 		8C37A51621567F1D008504B7 /* TMDBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37A51521567F1D008504B7 /* TMDBConstants.swift */; };
 		8C37A51921570972008504B7 /* MovieListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37A51821570972008504B7 /* MovieListTableViewCell.swift */; };
+		8CC90CFD21589119004EBE7F /* SearchMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC90CFC21589119004EBE7F /* SearchMovieViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		8C37A51321567CD3008504B7 /* TMDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		8C37A51521567F1D008504B7 /* TMDBConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBConstants.swift; sourceTree = "<group>"; };
 		8C37A51821570972008504B7 /* MovieListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListTableViewCell.swift; sourceTree = "<group>"; };
+		8CC90CFC21589119004EBE7F /* SearchMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMovieViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			children = (
 				8C37A50D2155CC4E008504B7 /* UpcomingViewController.swift */,
 				8C2B8504215841DE00633854 /* MovieDetailsViewController.swift */,
+				8CC90CFC21589119004EBE7F /* SearchMovieViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 				8C37A51621567F1D008504B7 /* TMDBConstants.swift in Sources */,
 				8C37A51921570972008504B7 /* MovieListTableViewCell.swift in Sources */,
 				8C37A5102155D859008504B7 /* Movie.swift in Sources */,
+				8CC90CFD21589119004EBE7F /* SearchMovieViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
