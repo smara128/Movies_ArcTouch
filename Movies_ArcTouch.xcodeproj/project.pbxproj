@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C2B8505215841DE00633854 /* MovieDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B8504215841DE00633854 /* MovieDetailsViewController.swift */; };
 		8C37A4F92155CB78008504B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37A4F82155CB78008504B7 /* AppDelegate.swift */; };
 		8C37A4FE2155CB78008504B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C37A4FC2155CB78008504B7 /* Main.storyboard */; };
 		8C37A5002155CB78008504B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C37A4FF2155CB78008504B7 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8C2B8504215841DE00633854 /* MovieDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsViewController.swift; sourceTree = "<group>"; };
 		8C37A4F52155CB78008504B7 /* Movies_ArcTouch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movies_ArcTouch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C37A4F82155CB78008504B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8C37A4FD2155CB78008504B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				8C37A50D2155CC4E008504B7 /* UpcomingViewController.swift */,
+				8C2B8504215841DE00633854 /* MovieDetailsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 				8C37A50E2155CC4E008504B7 /* UpcomingViewController.swift in Sources */,
 				8C37A51421567CD3008504B7 /* TMDBClient.swift in Sources */,
 				8C37A4F92155CB78008504B7 /* AppDelegate.swift in Sources */,
+				8C2B8505215841DE00633854 /* MovieDetailsViewController.swift in Sources */,
 				8C37A51621567F1D008504B7 /* TMDBConstants.swift in Sources */,
 				8C37A51921570972008504B7 /* MovieListTableViewCell.swift in Sources */,
 				8C37A5102155D859008504B7 /* Movie.swift in Sources */,

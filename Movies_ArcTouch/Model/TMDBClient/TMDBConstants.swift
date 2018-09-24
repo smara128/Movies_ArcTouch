@@ -31,6 +31,7 @@ extension TMDBClient {
         static let ApiKey = "api_key"
         static let Query = "query"
         static let Page = "page"
+        static let MovieID = "movie_id"
     }
     
     struct JSONBodyKeys {
@@ -39,13 +40,22 @@ extension TMDBClient {
     }
 
     struct JSONResponseKeys {
+        // Common Movies
         static let MovieID = "id"
         static let MovieTitle = "title"
-        static let MovieGenres = "genre_ids"
         static let MoviePosterPath = "poster_path"
         static let MovieBackdropPath = "backdrop_path"
         static let MovieReleaseDate = "release_date"
+        static let MovieRuntime = "runtime"
+        
+        // Upcoming Movies
+        static let MovieGenres = "genre_ids"
         static let MovieResults = "results"
+
+        // Movie Details
+        static let MovieDetailsGenres = "genres"
+
+        
         
         static let GenreID = "id"
         static let GenreName = "name"

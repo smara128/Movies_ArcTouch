@@ -11,19 +11,23 @@ import UIKit
 class UpcomingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var upcomingTableView: UITableView!
+    @IBOutlet weak var searchBarTopConstraint: NSLayoutConstraint!
     
     let upcomingCellId = "upcomingCell"
     var upcomingMovies: [Movie]?
-    var genres: [Genre]?
+    var allGenres: [Genre]?
+    var searchTask: URLSessionDataTask?
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        TMDBClient.sharedInstance().getGenres { (genres, error) in
-            if let genres = genres {
-                self.genres = genres
-                TMDBClient.sharedInstance().getUpcomingMovies(forPage: 1) { (movies, error) in
+        _ = TMDBClient.sharedInstance().getGenres { (allGenres, error) in
+            if let allGenres = allGenres {
+                self.allGenres = allGenres
+                _ = TMDBClient.sharedInstance().getUpcomingMovies(forPage: 1) { (movies, error) in
                     if let movies = movies {
                         self.upcomingMovies = movies
                         DispatchQueue.main.async {
@@ -35,7 +39,26 @@ class UpcomingViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetails" {
+            if let destination = segue.destination as? MovieDetailsViewController {
+                if let cell = sender as? UITableViewCell, let indexPath = upcomingTableView.indexPath(for: cell) {
+                    destination.movieId = upcomingMovies?[indexPath.row].id
+                }
+            }
+        }
+    }
     
+    @IBAction func searchButton(_ sender: UIBarButtonItem) {
+        let height = searchBar.frame.size.height
+        self.searchBarTopConstraint.constant = self.searchBarTopConstraint.constant == -height ? CGFloat(0) : -height
+        UIView .animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    
+
     // Mark: UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.upcomingMovies?.count ?? 0
@@ -81,7 +104,7 @@ class UpcomingViewController: UIViewController, UITableViewDataSource, UITableVi
             if moviesCount <= TMDBClient.Constants.MoviePerPage * page {
                 let nextPage = page + 1
                 print("Loading page \(nextPage)")
-                TMDBClient.sharedInstance().getUpcomingMovies(forPage: nextPage) { (movies, error) in
+                _ = TMDBClient.sharedInstance().getUpcomingMovies(forPage: nextPage) { (movies, error) in
                     if let movies = movies {
                         self.upcomingMovies?.append(contentsOf: movies)
                         DispatchQueue.main.async {
@@ -112,7 +135,7 @@ class UpcomingViewController: UIViewController, UITableViewDataSource, UITableVi
     func formatGenres(_ genreIds: Array<Int>) -> String {
         var names = [String]()
         _ = genreIds.map { (id) -> Void in
-            if let genre = self.genres?.filter({ $0.id == id }).first {
+            if let genre = self.allGenres?.filter({ $0.id == id }).first {
                 if let name = genre.name {
                     names.append(name)
                 }

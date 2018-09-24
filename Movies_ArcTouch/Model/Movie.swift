@@ -15,7 +15,22 @@ class Movie {
     let overview: String?
     let releaseDate: String?
     let posterPath: String?
-    let genreIds: Array<Int>?
+    let runtime: Int?
+    var genreIds: Array<Int>?
+    var genres: Array<Genre>?
+    var genreNames: String {
+        get {
+            var names = [String]()
+            if let genres = genres {
+                _ = genres.map{ (genre) -> Void in
+                    if let name = genre.name {
+                        names.append(name)
+                    }
+                }
+            }
+            return names.joined(separator: ", ")
+        }
+    }
     
     
     init(dictionary: [String:AnyObject]) {
@@ -24,7 +39,15 @@ class Movie {
         overview = dictionary["overview"] as? String
         releaseDate = dictionary[TMDBClient.JSONResponseKeys.MovieReleaseDate] as? String
         posterPath = dictionary[TMDBClient.JSONResponseKeys.MoviePosterPath] as? String
-        genreIds = dictionary[TMDBClient.JSONResponseKeys.MovieGenres] as? Array<Int>
+        runtime = dictionary[TMDBClient.JSONResponseKeys.MovieRuntime] as? Int
+        if let genres = dictionary[TMDBClient.JSONResponseKeys.MovieGenres] as? Array<Int> {
+            genreIds = genres
+        } else {
+            if let genresObject = dictionary[TMDBClient.JSONResponseKeys.MovieDetailsGenres] as? [[String:AnyObject]] {
+                genres = Genre.genresFromResponse(genresObject)
+            }
+        }
+        
     }
     
     
@@ -35,7 +58,6 @@ class Movie {
         }
         return movies
     }
-    
     
 }
 

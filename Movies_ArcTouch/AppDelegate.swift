@@ -15,10 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
-        UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().backIndicatorImage = UIImage(named: "BackButtonWhite")
+       
+        application.statusBarStyle = .lightContent
         
+        let navBarAppearance = UINavigationBar.appearance()
+        navBarAppearance.tintColor = .white
+        navBarAppearance.shadowImage = UIImage()
+        navBarAppearance.isTranslucent = true
+
         return true
     }
 

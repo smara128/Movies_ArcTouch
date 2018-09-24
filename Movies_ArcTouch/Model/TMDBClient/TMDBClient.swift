@@ -13,8 +13,8 @@ class TMDBClient : NSObject {
     var session = URLSession.shared
     
     
-    func getGenres(_ completionHandlerForGenres: @escaping (_ response: [Genre]?, _ error: NSError?) -> Void) {
-        taskForGETMethod(Methods.Genres, parameters: nil) { (response, error) in
+    func getGenres(_ completionHandlerForGenres: @escaping (_ response: [Genre]?, _ error: NSError?) -> Void) -> URLSessionTask {
+        let task = taskForGETMethod(Methods.Genres, parameters: nil) { (response, error) in
             if let error = error {
                 completionHandlerForGenres(nil, error)
             } else {
@@ -28,13 +28,14 @@ class TMDBClient : NSObject {
                 }
             }
         }
+        return task
     }
     
-    func getUpcomingMovies(forPage page: Int = 1, _ completionHandlerForUpcomingMovies: @escaping (_ response: [Movie]?, _ error: NSError?) -> Void) {
+    func getUpcomingMovies(forPage page: Int = 1, _ completionHandlerForUpcomingMovies: @escaping (_ response: [Movie]?, _ error: NSError?) -> Void) -> URLSessionTask {
         
         let parameters = [TMDBClient.ParameterKeys.Page:page as AnyObject]
         
-        taskForGETMethod(Methods.UpcomingMovies, parameters: parameters) { (response, error) in
+        let task = taskForGETMethod(Methods.UpcomingMovies, parameters: parameters) { (response, error) in
             if let error = error {
                 completionHandlerForUpcomingMovies(nil, error)
             } else {
@@ -48,11 +49,33 @@ class TMDBClient : NSObject {
                 }
             }
         }
+        return task
     }
     
+    func getMovieDetails(forId id: Int, _ completionHandlerForMovieDetails: @escaping (_ response: Movie?, _ error: NSError?) -> Void) -> URLSessionTask {
+        
+        let mutableMethod: String = substituteKeyInMethod(TMDBClient.Methods.MovieDetails, key: TMDBClient.ParameterKeys.MovieID, value: "\(id)")!
+        
+        let task = taskForGETMethod(mutableMethod, parameters: nil) { (response, error) in
+            if let error = error {
+                completionHandlerForMovieDetails(nil, error)
+            } else {
+                if let response = response as? [String:AnyObject] {
+                    let movie = Movie(dictionary: response)
+                    completionHandlerForMovieDetails(movie, nil)
+                } else {
+                    let userInfo = [NSLocalizedDescriptionKey : "Couldn't parsed the json results key."]
+                    let error = NSError(domain: "convertData", code: 1, userInfo: [NSLocalizedDescriptionKey: userInfo])
+                    completionHandlerForMovieDetails(nil, error)
+                }
+            }
+        }
+        task.resume()
+        return task
+    }
     
     // Mark: Base Requests
-    func taskForGETMethod(_ method: String, parameters: [String:AnyObject]?, completionHandlerForGET: @escaping (_ response: AnyObject?, _ error: NSError?) -> Void) {
+    func taskForGETMethod(_ method: String, parameters: [String:AnyObject]?, completionHandlerForGET: @escaping (_ response: AnyObject?, _ error: NSError?) -> Void) -> URLSessionTask {
         
         let url = urlFromParameters(parameters, withPathExtension: method)
         let request = NSMutableURLRequest(url: url)
@@ -79,15 +102,16 @@ class TMDBClient : NSObject {
             self.convert(data, completionHadlerForData: completionHandlerForGET)
         }
         task.resume()
+        return task
     }
     
-    func taskForGETImage(_ size: String, filePath: String, completionHandlerForImage: @escaping (_ imageData: Data?, _ error: NSError?) -> Void) {
+    func taskForGETImage(_ size: String, filePath: String, completionHandlerForImage: @escaping (_ imageData: Data?, _ error: NSError?) -> Void) -> URLSessionTask {
         
         let baseURL = URL(string: TMDBClient.Constants.SecureBaseImageURLString)!
         let url = baseURL.appendingPathComponent(size).appendingPathComponent(filePath)
         let request = URLRequest(url: url)
         
-        session.dataTask(with: request) { (data, response, error) in
+        let task = session.dataTask(with: request) { (data, response, error) in
             func sendError(_ error: String) {
                 print(error)
                 let userInfo = [NSLocalizedDescriptionKey : error]
@@ -106,7 +130,9 @@ class TMDBClient : NSObject {
                 return
             }
             completionHandlerForImage(data, nil)
-        }.resume()
+        }
+        task.resume()
+        return task
     }
     
     private func urlFromParameters(_ parameters: [String:AnyObject]?, withPathExtension: String? = nil) -> URL {
@@ -141,6 +167,14 @@ class TMDBClient : NSObject {
             completionHadlerForData(nil, parseError)
         }
         completionHadlerForData(parsedResponse, nil)
+    }
+    
+    func substituteKeyInMethod(_ method: String, key: String, value: String) -> String? {
+        if method.range(of: "{\(key)}") != nil {
+            return method.replacingOccurrences(of: "{\(key)}", with: value)
+        } else {
+            return nil
+        }
     }
     
     // Mark: Shared
