@@ -32,7 +32,7 @@ class Movie {
             return names.joined(separator: ", ")
         }
     }
-    
+    static var pages: Int?
     
     init(dictionary: [String:AnyObject]) {
         id = dictionary[TMDBClient.JSONResponseKeys.MovieID] as? Int

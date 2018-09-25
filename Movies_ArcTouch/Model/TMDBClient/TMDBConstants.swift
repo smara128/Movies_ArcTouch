@@ -53,6 +53,7 @@ extension TMDBClient {
         // Upcoming Movies
         static let MovieGenres = "genre_ids"
         static let MovieResults = "results"
+        static let MoviePages = "total_pages"
 
         // Movie Details
         static let MovieDetailsGenres = "genres"

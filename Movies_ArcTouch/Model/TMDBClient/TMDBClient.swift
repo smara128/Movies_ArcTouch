@@ -39,6 +39,9 @@ class TMDBClient : NSObject {
             if let error = error {
                 completionHandlerForUpcomingMovies(nil, error)
             } else {
+                if let pages = response?[TMDBClient.JSONResponseKeys.MoviePages] as? Int {
+                    Movie.pages = pages
+                }
                 if let response = response?[TMDBClient.JSONResponseKeys.MovieResults] as? [[String:AnyObject]] {
                     let movies = Movie.moviesFromResponse(response)
                     completionHandlerForUpcomingMovies(movies, nil)
