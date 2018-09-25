@@ -108,6 +108,7 @@ class SearchMovieViewController: UIViewController, UITableViewDataSource, UITabl
         
         cell.movieNameLabel.text = movie.title
         cell.overviewLabel.text = movie.overview
+        cell.overviewLabel.setContentOffset(CGPoint.zero, animated: false)
 
         if let genres = movie.genreIds {
             cell.genresLabel.text = formatGenres(genres)
